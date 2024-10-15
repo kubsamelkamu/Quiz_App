@@ -16,5 +16,22 @@ if (!firebase.apps.length) {
 }
 
 export const auth = firebase.auth();
-export const db = firebase.firestore();
+
+export const signup = (email, password) => {
+  return auth.createUserWithEmailAndPassword(email, password);
+};
+
+export const login = (email, password) => {
+  return auth.signInWithEmailAndPassword(email, password);
+};
+
+const googleProvider = new firebase.auth.GoogleAuthProvider();
+export const signInWithGoogle = () => {
+  return auth.signInWithPopup(googleProvider);
+};
+
+export const logout = () => {
+  return auth.signOut();
+};
+
 export default firebase;
