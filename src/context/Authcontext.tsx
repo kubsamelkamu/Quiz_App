@@ -2,7 +2,6 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 import {  onAuthStateChanged, User } from 'firebase/auth'; 
 import { auth } from '../firebase';
 
-
 interface AuthContextProps {
   currentUser: User | null; 
 }
@@ -27,6 +26,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   return <AuthContext.Provider value={{ currentUser }}>
-                {children}
+            {children}
         </AuthContext.Provider>;
 };
