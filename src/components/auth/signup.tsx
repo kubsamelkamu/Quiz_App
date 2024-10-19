@@ -1,15 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { signup } from '../../auth';
+import { passwordStrengthChecker } from '../../utils/passwordStrengthChecker';
 
 const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordStrength, setPasswordStrength] = useState('');
   const [error, setError] = useState('');
-  const [hydrated, setHydrated] = useState(false); 
+  
 
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputPassword = e.target.value;
+    setPassword(inputPassword);
+    const strength = passwordStrengthChecker(inputPassword);
+    setPasswordStrength(strength); 
+  };
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,17 +23,15 @@ const SignUp = () => {
       await signup(email, password);
       alert('Account created successfully! Please check your email to verify your account.');
     } catch (err) {
-      if(err instanceof Error) {
-        setError(err.message);
-      }else{
+      if (err instanceof Error) {
+        if (err instanceof Error) {
+           setError('Error creating account')
+        } 
+      } else {
         setError('Failed to sign up');
       }
     }
   };
-
-  if (!hydrated) {
-    return null;
-  }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
@@ -54,9 +57,14 @@ const SignUp = () => {
               placeholder="Enter your password"
               className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={handlePasswordChange}
               required
             />
+            <p className={`text-sm mt-2 ${
+              passwordStrength === 'Weak' ? 'text-red-500' : passwordStrength === 'Medium' ? 'text-yellow-500' : 'text-green-500'
+            }`}>
+              Password Strength: {passwordStrength}
+            </p>
           </div>
           <button
             type="submit"
