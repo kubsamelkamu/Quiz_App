@@ -7,28 +7,38 @@ const SignUp = () => {
   const [password, setPassword] = useState('');
   const [passwordStrength, setPasswordStrength] = useState('');
   const [error, setError] = useState('');
-  
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputPassword = e.target.value;
     setPassword(inputPassword);
     const strength = passwordStrengthChecker(inputPassword);
-    setPasswordStrength(strength); 
+    setPasswordStrength(strength);
   };
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setSuccessMessage('');
+
     try {
       await signup(email, password);
-      alert('Account created successfully! Please check your email to verify your account.');
+      setSuccessMessage('Account created successfully! Please check your email to verify your account.'); // Success message
     } catch (err) {
-      if (err instanceof Error) {
-        if (err instanceof Error) {
-           setError('Error creating account')
-        } 
-      } else {
-        setError('Failed to sign up');
+      if(err instanceof Error){
+        switch (err.message) {
+          case 'auth/email-already-in-use':
+            setError('Email is already in use');
+            break;
+          case 'auth/invalid-email':
+            setError("invalid email address");
+            break;
+          case 'auth/weak-password':
+            setError('weak password');
+            break;
+          default:
+            break;
+        }
       }
     }
   };
@@ -38,6 +48,8 @@ const SignUp = () => {
       <div className="bg-white shadow-md rounded-lg p-8 max-w-md w-full">
         <h1 className="text-2xl font-bold mb-6 text-gray-800">Sign Up</h1>
         {error && <p className="text-red-500 mb-4">{error}</p>}
+        {successMessage && <p className="text-green-500 mb-4">{successMessage}</p>}
+
         <form onSubmit={handleSignUp} className="space-y-4">
           <div>
             <label className="block text-gray-700 mb-2">Email</label>
@@ -60,9 +72,11 @@ const SignUp = () => {
               onChange={handlePasswordChange}
               required
             />
-            <p className={`text-sm mt-2 ${
-              passwordStrength === 'Weak' ? 'text-red-500' : passwordStrength === 'Medium' ? 'text-yellow-500' : 'text-green-500'
-            }`}>
+            <p
+              className={`text-sm mt-2 ${
+                passwordStrength === 'Weak' ? 'text-red-500' : passwordStrength === 'Medium' ? 'text-yellow-500' : 'text-green-500'
+              }`}
+            >
               Password Strength: {passwordStrength}
             </p>
           </div>
