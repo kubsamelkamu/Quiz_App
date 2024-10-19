@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { signup } from '../../auth';
-import { passwordStrengthChecker } from '../../utils/passwordStrengthChecker';
+import Link from 'next/link'; 
+import { passwordStrengthChecker } from '@/utils/passwordStrengthChecker';
 
 const SignUp = () => {
   const [email, setEmail] = useState('');
@@ -23,23 +24,12 @@ const SignUp = () => {
 
     try {
       await signup(email, password);
-      setSuccessMessage('Account created successfully! Please check your email to verify your account.'); // Success message
+      setSuccessMessage('Account created successfully! Please check your email to verify your account.');
     } catch (err) {
       if(err instanceof Error){
-        switch (err.message) {
-          case 'auth/email-already-in-use':
-            setError('Email is already in use');
-            break;
-          case 'auth/invalid-email':
-            setError("invalid email address");
-            break;
-          case 'auth/weak-password':
-            setError('weak password');
-            break;
-          default:
-            break;
-        }
+        setError('Failed to sign up! Please try again')
       }
+      setError('Failed to sign up. Please try again.');
     }
   };
 
@@ -87,6 +77,12 @@ const SignUp = () => {
             Sign Up
           </button>
         </form>
+        <p className="mt-4 text-gray-600">
+          Already have an account? {' '}
+          <Link href="/login" legacyBehavior className="text-blue-800 hover:underline">
+            Login here
+          </Link>
+        </p>
       </div>
     </div>
   );
