@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { signup } from '../../auth';
-import Link from 'next/link'; 
+import { useRouter } from 'next/router'; 
+import Link from 'next/link';
 import { passwordStrengthChecker } from '@/utils/passwordStrengthChecker';
 
 const SignUp = () => {
@@ -9,6 +10,7 @@ const SignUp = () => {
   const [passwordStrength, setPasswordStrength] = useState('');
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const router = useRouter(); 
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputPassword = e.target.value;
@@ -25,9 +27,12 @@ const SignUp = () => {
     try {
       await signup(email, password);
       setSuccessMessage('Account created successfully! Please check your email to verify your account.');
+      setTimeout(() => {
+        router.push('/login');
+      }, 3000); 
     } catch (err) {
       if(err instanceof Error){
-        setError('Failed to sign up! Please try again')
+        setError('Failed to sign up.')
       }
       setError('Failed to sign up. Please try again.');
     }
@@ -78,11 +83,11 @@ const SignUp = () => {
           </button>
         </form>
         <p className="mt-4 text-gray-600">
-          Already have an account? {' '}
-          <Link href="/login" legacyBehavior className="text-blue-800 hover:underline">
-            Login here
-          </Link>
-        </p>
+              Already have account?{' '}
+              <Link href="/login" className="text-blue-500 hover:underline">
+                login
+              </Link>
+          </p>
       </div>
     </div>
   );
