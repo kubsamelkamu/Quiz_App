@@ -82,8 +82,14 @@ const Login = () => {
         </button>
         <p className="mt-4 text-gray-600">
           Forgot your password?{' '}
-          <Link href="/resetPassword" className="text-blue-500 hover:underline">
+          <Link href="/reset" className="text-blue-500 hover:underline">
             Reset
+          </Link> 
+        </p>
+        <p className="mt-4 text-gray-600">
+          Do not have account?{' '}
+          <Link href="/signup" className="text-blue-500 hover:underline">
+            Sign up
           </Link> 
         </p>
       </div>
