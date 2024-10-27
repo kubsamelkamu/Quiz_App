@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import styles from '@/styles/quiz.module.css';
+import QuizSummary from '@/components/Quiz/QuizSummary';
 
 interface Question {
   question: string;
@@ -7,12 +8,13 @@ interface Question {
   incorrect_answers: string[];
 }
 
-
 const QuizPage = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [timer, setTimer] = useState(30); // Timer in seconds
+  const [score, setScore] = useState(0);
+  const [showSummary, setShowSummary] = useState(false);
+  const [timer, setTimer] = useState(30);
 
   useEffect(() => {
     const storedQuestions = localStorage.getItem('quizQuestions');
@@ -37,30 +39,43 @@ const QuizPage = () => {
         if (prevTimer > 0) return prevTimer - 1;
         else {
           handleNext(); 
-          return 30; 
+          return 10; 
         }
       });
     }, 1000);
-    
-    return () => clearInterval(countdown); 
+
+    return () => clearInterval(countdown);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentQuestionIndex]);
+
+  const handleAnswerSelection = (answer: string) => {
+    if (answer === questions[currentQuestionIndex].correct_answer) {
+      setScore(score + 1);
+    }
+    handleNext();
+  };
 
   const handleNext = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setTimer(30); 
+      setTimer(10);
+    } else {
+      setShowSummary(true); 
     }
   };
 
-  const handlePrev = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(currentQuestionIndex - 1);
-      setTimer(30); 
-    }
+  const handleRetry = () => {
+    setScore(0);
+    setCurrentQuestionIndex(0);
+    setShowSummary(false);
+    setTimer(30);
   };
 
   if (loading) return <div>Loading...</div>;
+
+  if (showSummary) {
+    return <QuizSummary score={score} totalQuestions={questions.length} onRetry={handleRetry} />;
+  }
 
   const progressPercentage = ((currentQuestionIndex + 1) / questions.length) * 100;
 
@@ -78,13 +93,19 @@ const QuizPage = () => {
         <div>
           {[...questions[currentQuestionIndex].incorrect_answers, questions[currentQuestionIndex].correct_answer].map((answer, idx) => (
             <div key={idx}>
-              <input type="radio" id={`answer-${idx}`} name="answer" value={answer || ""} />
+              <input
+                type="radio"
+                id={`answer-${idx}`}
+                name="answer"
+                value={answer || ""}
+                onClick={() => handleAnswerSelection(answer)}
+              />
               <label htmlFor={`answer-${idx}`} className="text-white">{answer || ""}</label>
             </div>
           ))}
         </div>
         <div className="flex justify-between mt-4">
-          <button onClick={handlePrev} disabled={currentQuestionIndex === 0} className="bg-gray-500 text-white px-4 py-2 rounded-md">Previous</button>
+          <button onClick={handleRetry} disabled={currentQuestionIndex === 0} className="bg-gray-500 text-white px-4 py-2 rounded-md">Previous</button>
           <button onClick={handleNext} disabled={currentQuestionIndex === questions.length - 1} className="bg-indigo-600 text-white px-4 py-2 rounded-md">Next</button>
         </div>
       </div>
@@ -93,6 +114,3 @@ const QuizPage = () => {
 };
 
 export default QuizPage;
-
-
-
