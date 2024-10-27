@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
-import TopNavBar from './topNavbar';
+import TopNavBar from './TopNavBar';
+
 
 interface DashboardLayoutProps {
   children: ReactNode;
