@@ -1,0 +1,13 @@
+.quiz-background {
+    background: linear-gradient(-45deg, #1e3a8a, #3b82f6, #0ea5e9, #3b82f6);
+    background-size: 400% 400%;
+    animation: gradientAnimation 10s ease infinite;
+    min-height: 100vh;
+  }
+  
+  @keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
