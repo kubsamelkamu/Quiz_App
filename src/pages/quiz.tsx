@@ -1,5 +1,5 @@
-import styles from '@/styles/quiz.module.css';
 import { useEffect, useState } from 'react';
+import styles from '@/styles/quiz.module.css';
 
 interface Question {
   question: string;
@@ -7,10 +7,12 @@ interface Question {
   incorrect_answers: string[];
 }
 
+
 const QuizPage = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [timer, setTimer] = useState(30); // Timer in seconds
 
   useEffect(() => {
     const storedQuestions = localStorage.getItem('quizQuestions');
@@ -29,19 +31,36 @@ const QuizPage = () => {
     setLoading(false);
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  useEffect(() => {
+    const countdown = setInterval(() => {
+      setTimer((prevTimer) => {
+        if (prevTimer > 0) return prevTimer - 1;
+        else {
+          handleNext(); 
+          return 30; 
+        }
+      });
+    }, 1000);
+    
+    return () => clearInterval(countdown); 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentQuestionIndex]);
 
   const handleNext = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setTimer(30); 
     }
   };
 
   const handlePrev = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
+      setTimer(30); 
     }
   };
+
+  if (loading) return <div>Loading...</div>;
 
   const progressPercentage = ((currentQuestionIndex + 1) / questions.length) * 100;
 
@@ -49,18 +68,18 @@ const QuizPage = () => {
     <div className={`${styles['quiz-background']} flex flex-col items-center justify-center`}>
       <h1 className="text-center text-2xl font-bold my-4 text-white">Quiz</h1>
       <div className="bg-gray-200 w-full h-4 rounded-full my-4">
-        <div
-          className="bg-indigo-600 h-4 rounded-full"
-          style={{ width: `${progressPercentage}%` }}
-        ></div>
+        <div className="bg-indigo-600 h-4 rounded-full" style={{ width: `${progressPercentage}%` }}></div>
+      </div>
+      <div className="text-center text-white text-xl mb-4">
+        Time Remaining: {timer} seconds
       </div>
       <div>
-        <h3>{questions[currentQuestionIndex].question}</h3>
+        <h3 className="text-white">{questions[currentQuestionIndex].question}</h3>
         <div>
           {[...questions[currentQuestionIndex].incorrect_answers, questions[currentQuestionIndex].correct_answer].map((answer, idx) => (
             <div key={idx}>
               <input type="radio" id={`answer-${idx}`} name="answer" value={answer || ""} />
-              <label htmlFor={`answer-${idx}`}>{answer || ""}</label>
+              <label htmlFor={`answer-${idx}`} className="text-white">{answer || ""}</label>
             </div>
           ))}
         </div>
@@ -74,3 +93,6 @@ const QuizPage = () => {
 };
 
 export default QuizPage;
+
+
+
