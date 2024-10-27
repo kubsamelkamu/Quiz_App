@@ -1,4 +1,4 @@
-// /pages/quiz.tsx
+import styles from '@/styles/quiz.module.css';
 import { useEffect, useState } from 'react';
 
 interface Question {
@@ -46,8 +46,8 @@ const QuizPage = () => {
   const progressPercentage = ((currentQuestionIndex + 1) / questions.length) * 100;
 
   return (
-    <div>
-      <h1 className="text-center text-2xl font-bold my-4">Quiz</h1>
+    <div className={`${styles['quiz-background']} flex flex-col items-center justify-center`}>
+      <h1 className="text-center text-2xl font-bold my-4 text-white">Quiz</h1>
       <div className="bg-gray-200 w-full h-4 rounded-full my-4">
         <div
           className="bg-indigo-600 h-4 rounded-full"
