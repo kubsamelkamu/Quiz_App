@@ -19,10 +19,12 @@ const QuizSelection = () => {
       try {
         const questions = await fetchQuizQuestions(category, difficulty);
         const shuffledQuestions = shuffleArray(questions);
+
+        // Clear old data and store the new questions in localStorage
         localStorage.removeItem('quizQuestions');
         localStorage.setItem('quizQuestions', JSON.stringify(shuffledQuestions));
 
-        router.push('/quiz')
+        router.push('/quiz'); 
       } catch (error) {
         console.error('Error fetching quiz questions:', error);
         alert('Failed to load quiz. Please try again.');
@@ -55,7 +57,15 @@ const QuizSelection = () => {
           <button onClick={() => setDifficulty('hard')} className="bg-red-500 px-4 py-2 rounded-md text-white">Hard</button>
         </div>
 
-        <button onClick={handleFetchQuestions} disabled={!category || !difficulty || loading} className="bg-indigo-600 w-full py-3 rounded-md text-white font-bold">
+        <button
+          onClick={handleFetchQuestions}
+          disabled={!category || !difficulty || loading} 
+          className={`w-full py-3 rounded-md font-bold ${
+            !category || !difficulty || loading
+              ? 'bg-gray-400 text-gray-200 cursor-not-allowed' 
+              : 'bg-indigo-600 text-white hover:bg-indigo-700'
+          }`}
+        >
           {loading ? 'Loading...' : 'Start Quiz'}
         </button>
       </div>
