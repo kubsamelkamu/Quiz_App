@@ -18,9 +18,8 @@ const QuizPage = () => {
       const mappedQuestions = parsedQuestions.map((q: any) => ({
         question: q.question,
         correct_answer: q.correct_answer,
-        incorrect_answers: Object.values(q.answers).filter(
-          (answer) => answer && answer !== q.correct_answer
-        ),
+        incorrect_answers: Object.values(q.answers)
+          .filter((answer) => answer !== null && answer !== q.correct_answer),
       }));
 
       setQuestions(mappedQuestions);
@@ -41,8 +40,13 @@ const QuizPage = () => {
           <div>
             {[...question.incorrect_answers, question.correct_answer].map((answer, idx) => (
               <div key={idx}>
-                <input type="radio" id={`answer-${idx}`} name={`question-${index}`} value={answer} />
-                <label htmlFor={`answer-${idx}`}>{answer}</label>
+                <input
+                  type="radio"
+                  id={`answer-${idx}`}
+                  name={`question-${index}`}
+                  value={answer || ""} 
+                />
+                <label htmlFor={`answer-${idx}`}>{answer || ""}</label>
               </div>
             ))}
           </div>
