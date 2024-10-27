@@ -1,31 +1,30 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import {  onAuthStateChanged, User } from 'firebase/auth'; 
-import { auth } from '../firebase';
+import { createContext, useContext, useState, useEffect } from 'react';
+import { auth } from '@/firebase';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 
-interface AuthContextProps {
-  currentUser: User | null; 
-}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const AuthContext = createContext<any>(null);
 
-interface AuthProviderProps {
-  children: ReactNode;
-}
+export const useAuth = () => useContext(AuthContext);
 
-const AuthContext = createContext<AuthContextProps | undefined>(undefined);
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
-
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [currentUser, setCurrentUser] = useState<any>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
     });
-    return () => unsubscribe();
+    return unsubscribe;
   }, []);
 
-  return <AuthContext.Provider value={{ currentUser }}>
-            {children}
-        </AuthContext.Provider>;
+  const logout = async () => {
+    await signOut(auth);
+  };
+
+  return (
+    <AuthContext.Provider value={{ currentUser, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
