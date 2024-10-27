@@ -20,7 +20,6 @@ const QuizSelection = () => {
         const questions = await fetchQuizQuestions(category, difficulty);
         const shuffledQuestions = shuffleArray(questions);
 
-        // Clear old data and store the new questions in localStorage
         localStorage.removeItem('quizQuestions');
         localStorage.setItem('quizQuestions', JSON.stringify(shuffledQuestions));
 
@@ -47,7 +46,6 @@ const QuizSelection = () => {
           <button onClick={() => setCategory('Kubernetes')} className="bg-indigo-500 px-4 py-2 rounded-md text-white">Kubernetes</button>
           <button onClick={() => setCategory('Programming')} className="bg-purple-500 px-4 py-2 rounded-md text-white">Programming</button>
           <button onClick={() => setCategory('JavaScript')} className="bg-yellow-500 px-4 py-2 rounded-md text-white">JavaScript</button>
-          <button onClick={() => setCategory('Cloud Computing')} className="bg-red-500 px-4 py-2 rounded-md text-white">Cloud Computing</button>
         </div>
 
         <h2 className="text-2xl font-bold mb-4 text-gray-800">Select Difficulty</h2>
