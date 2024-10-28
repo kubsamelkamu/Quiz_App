@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
-import styles from '@/styles/quiz.module.css';
+import { collection, addDoc, Timestamp } from 'firebase/firestore';
+import { db } from '@/firebase';
 import QuizSummary from '@/components/Quiz/QuizSummary';
+import { useAuth } from '@/context/Authcontext';
 
 interface Question {
   question: string;
@@ -9,12 +11,12 @@ interface Question {
 }
 
 const QuizPage = () => {
+  const { currentUser } = useAuth();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [showSummary, setShowSummary] = useState(false);
-  const [timer, setTimer] = useState(30);
 
   useEffect(() => {
     const storedQuestions = localStorage.getItem('quizQuestions');
@@ -33,21 +35,6 @@ const QuizPage = () => {
     setLoading(false);
   }, []);
 
-  useEffect(() => {
-    const countdown = setInterval(() => {
-      setTimer((prevTimer) => {
-        if (prevTimer > 0) return prevTimer - 1;
-        else {
-          handleNext(); 
-          return 10; 
-        }
-      });
-    }, 1000);
-
-    return () => clearInterval(countdown);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentQuestionIndex]);
-
   const handleAnswerSelection = (answer: string) => {
     if (answer === questions[currentQuestionIndex].correct_answer) {
       setScore(score + 1);
@@ -58,9 +45,9 @@ const QuizPage = () => {
   const handleNext = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setTimer(10);
     } else {
-      setShowSummary(true); 
+      saveQuizResult();
+      setShowSummary(true);
     }
   };
 
@@ -68,7 +55,25 @@ const QuizPage = () => {
     setScore(0);
     setCurrentQuestionIndex(0);
     setShowSummary(false);
-    setTimer(30);
+  };
+
+  const saveQuizResult = async () => {
+    if (!currentUser) return;
+
+    const quizRecord = {
+      userId: currentUser.uid,
+      dateTaken: Timestamp.now(),
+      score,
+      category: new URLSearchParams(window.location.search).get("category") || "General",
+      difficulty: new URLSearchParams(window.location.search).get("difficulty") || "easy",
+    };
+
+    try {
+      await addDoc(collection(db, 'users', currentUser.uid, 'quizzes'), quizRecord);
+      console.log('Quiz record saved successfully!');
+    } catch (error) {
+      console.error('Error saving quiz record:', error);
+    }
   };
 
   if (loading) return <div>Loading...</div>;
@@ -77,37 +82,27 @@ const QuizPage = () => {
     return <QuizSummary score={score} totalQuestions={questions.length} onRetry={handleRetry} />;
   }
 
-  const progressPercentage = ((currentQuestionIndex + 1) / questions.length) * 100;
-
   return (
-    <div className={`${styles['quiz-background']} flex flex-col items-center justify-center`}>
-      <h1 className="text-center text-2xl font-bold my-4 text-white">Quiz</h1>
-      <div className="bg-gray-200 w-full h-4 rounded-full my-4">
-        <div className="bg-indigo-600 h-4 rounded-full" style={{ width: `${progressPercentage}%` }}></div>
+    <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center">
+      <h1 className="text-center text-2xl font-bold my-4">Quiz</h1>
+
+      <h3 className="text-center text-lg font-medium mb-4">
+        {questions[currentQuestionIndex].question}
+      </h3>
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 max-w-xl w-full mb-8">
+        {[...questions[currentQuestionIndex].incorrect_answers, questions[currentQuestionIndex].correct_answer].map((answer, idx) => (
+          <button
+            key={idx}
+            onClick={() => handleAnswerSelection(answer)}
+            className="bg-gray-100 hover:bg-blue-500 text-gray-800 hover:text-white rounded-lg py-2 px-4 transition-colors duration-150"
+          >
+            {answer}
+          </button>
+        ))}
       </div>
-      <div className="text-center text-white text-xl mb-4">
-        Time Remaining: {timer} seconds
-      </div>
-      <div>
-        <h3 className="text-white">{questions[currentQuestionIndex].question}</h3>
-        <div>
-          {[...questions[currentQuestionIndex].incorrect_answers, questions[currentQuestionIndex].correct_answer].map((answer, idx) => (
-            <div key={idx}>
-              <input
-                type="radio"
-                id={`answer-${idx}`}
-                name="answer"
-                value={answer || ""}
-                onClick={() => handleAnswerSelection(answer)}
-              />
-              <label htmlFor={`answer-${idx}`} className="text-white">{answer || ""}</label>
-            </div>
-          ))}
-        </div>
-        <div className="flex justify-between mt-4">
-          <button onClick={handleRetry} disabled={currentQuestionIndex === 0} className="bg-gray-500 text-white px-4 py-2 rounded-md">Previous</button>
-          <button onClick={handleNext} disabled={currentQuestionIndex === questions.length - 1} className="bg-indigo-600 text-white px-4 py-2 rounded-md">Next</button>
-        </div>
+      <div className="flex justify-between w-full max-w-sm">
+        <button onClick={handleRetry} disabled={currentQuestionIndex === 0} className="bg-gray-500 text-white py-2 px-4 rounded-md">Retry</button>
+        <button onClick={handleNext} disabled={currentQuestionIndex === questions.length - 1} className="bg-indigo-600 text-white py-2 px-4 rounded-md">Next</button>
       </div>
     </div>
   );
