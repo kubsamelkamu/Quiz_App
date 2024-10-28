@@ -33,7 +33,7 @@ const QuizSummary: React.FC<QuizSummaryProps> = ({ score, totalQuestions, onRetr
           Retake Quiz
         </button>
         <button
-          onClick={() => router.push('/')}
+          onClick={() => router.push('/dashboard')}
           className="bg-gray-700 hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded-md"
         >
           Return Home
