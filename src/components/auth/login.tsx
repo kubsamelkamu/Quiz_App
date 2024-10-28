@@ -3,8 +3,10 @@ import Link from 'next/link';
 import { FirebaseError } from 'firebase/app'; 
 import { login, signInWithGoogle } from '@/auth';
 import { getFriendlyErrorMessage } from '@/utils/errormessage';
+import { useRouter } from 'next/router';
 
 const Login = () => {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string>('');
@@ -15,7 +17,9 @@ const Login = () => {
 
     try {
       await login(email, password);
-      alert('Login successful!'); 
+      router.push({
+        pathname: '/dashboard',
+      });
     } catch (err) {
       if (err instanceof FirebaseError) {
         const errorMessage = getFriendlyErrorMessage(err.code); 
@@ -31,7 +35,9 @@ const Login = () => {
     setError(''); 
     try {
       await signInWithGoogle();
-      alert('Google Sign-In successful!');
+      router.push({
+        pathname: '/dashboard',
+      });
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       setError('Google sign-in failed. Please try again.');
