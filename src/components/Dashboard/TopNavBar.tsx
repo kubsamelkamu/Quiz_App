@@ -33,7 +33,7 @@ const TopNavBar = () => {
           <Link href="/dashboard/profile" className="hover:underline">
             Profile
           </Link>
-          <Link href="" className="hover:underline">
+          <Link href="/dashboard/history" className="hover:underline">
                 Quiz History
           </Link>
           <Link href="/" className="hover:underline">
