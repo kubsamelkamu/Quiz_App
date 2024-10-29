@@ -17,7 +17,7 @@ import { db } from '@/firebase';
 import { useAuth } from '@/context/Authcontext';
 
 
-// Register the chart components and the Filler plugin with Chart.js
+
 ChartJS.register(LineElement, LinearScale, CategoryScale, PointElement, Tooltip, Legend, Filler);
 
 interface QuizRecord {
