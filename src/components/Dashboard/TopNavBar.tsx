@@ -36,14 +36,10 @@ const TopNavBar = () => {
           <Link href="/dashboard/history" className="hover:underline">
                 Quiz History
           </Link>
-          <Link href="/" className="hover:underline">
+          <Link href="/dashboard/progress" className="hover:underline">
              Progress
           </Link>
-          <Link href='' className="hover:underline">
-                Leaderboard
-          </Link>
         </div>
-
         <div className="hidden md:flex items-center space-x-4">
           {currentUser ? (
             <>
@@ -79,9 +75,6 @@ const TopNavBar = () => {
           </Link>
           <Link href="/dashboard/progress"onClick={toggleMenu} className="block text-white hover:underline">
              Progress
-          </Link>
-          <Link href="/dashboard/leaderboard"onClick={toggleMenu} className="block text-white hover:underline">
-            Leaderboard
           </Link>
           {currentUser ? (
             <button onClick={() => { handleLogout(); toggleMenu(); }} className="block text-white hover:underline">
