@@ -25,7 +25,7 @@ const TopNavBar = () => {
       <div className="container mx-auto flex justify-between items-center">
         <div className="text-2xl font-bold">
           <Link href="/dashboard">
-            Quiz Dashboard
+            Dashboard
           </Link>
         </div>
 
