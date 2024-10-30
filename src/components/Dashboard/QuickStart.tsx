@@ -1,10 +1,30 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+interface Category {
+  id: number;
+  name: string;
+}
 
 const QuickStart = () => {
   const router = useRouter();
-  const [category, setCategory] = useState('Linux');
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [category, setCategory] = useState<string>('');
   const [difficulty, setDifficulty] = useState('easy');
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get('https://opentdb.com/api_category.php');
+        setCategories(response.data.trivia_categories);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleStartQuiz = () => {
     router.push({
@@ -23,9 +43,12 @@ const QuickStart = () => {
         onChange={(e) => setCategory(e.target.value)}
         className="w-full p-2 border rounded-md mb-4"
       >
-        <option value="Linux">Linux</option>
-        <option value="DevOps">DevOps</option>
-        <option value="Docker">Docker</option>
+        <option value="">Select a category</option>
+        {categories.map((cat) => (
+          <option key={cat.id} value={cat.id}>
+            {cat.name}
+          </option>
+        ))}
       </select>
 
       <label className="block text-gray-700 mb-2">Select Difficulty</label>
@@ -42,6 +65,7 @@ const QuickStart = () => {
       <button
         onClick={handleStartQuiz}
         className="w-full bg-indigo-600 text-white py-2 rounded-md"
+        disabled={!category}
       >
         Start Quiz
       </button>
