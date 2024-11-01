@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { updateProfile } from 'firebase/auth';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useAuth } from '@/context/Authcontext';
+import router from 'next/router';
 
 const UserProfile = () => {
   const { currentUser } = useAuth();
@@ -10,6 +11,10 @@ const UserProfile = () => {
   const [displayName, setDisplayName] = useState(currentUser?.displayName || '');
   const [profilePicture, setProfilePicture] = useState(currentUser?.photoURL || '');
   const [newProfilePicture, setNewProfilePicture] = useState<File | null>(null);
+
+  if(!currentUser){
+    router.push('/login');
+  }
 
   const handleEditToggle = () => setIsEditing(!isEditing);
 
