@@ -28,7 +28,7 @@ const QuizPage = () => {
   useEffect(() => {
     
     const fetchQuestions = async () => {
-      router.push('/login');
+      
       try {
         const response = await axios.get('https://opentdb.com/api.php', {
           params: {
