@@ -13,6 +13,7 @@ import {
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { useAuth } from '@/context/Authcontext';
+import router from 'next/router';
 
 
 
@@ -32,7 +33,9 @@ const ProgressChart = () => {
 
   useEffect(() => {
     const fetchQuizHistory = async () => {
-      if (!currentUser) return;
+      if(!currentUser){
+        router.push('/login');
+      }
 
       try {
         const quizzesRef = collection(db, 'users', currentUser.uid, 'quizzes');
