@@ -11,7 +11,7 @@ const LandingPage = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.5, ease: "easeOut" }}
       >
-        Welcome to this Quiz Application
+        Welcome to our Quiz 
       </motion.h1>
       <motion.p
         className="text-lg md:text-2xl mb-10"
@@ -21,8 +21,6 @@ const LandingPage = () => {
       >
         Empowering your learning with interactive quizzes and progress tracking.
       </motion.p>
-
-      {/* Animated Button */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
