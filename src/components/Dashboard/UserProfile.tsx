@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+"use client";
 import { useState } from 'react';
 import { updateProfile } from 'firebase/auth';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -11,8 +12,8 @@ const UserProfile = () => {
   const [displayName, setDisplayName] = useState(currentUser?.displayName || '');
   const [profilePicture, setProfilePicture] = useState(currentUser?.photoURL || '');
   const [newProfilePicture, setNewProfilePicture] = useState<File | null>(null);
-
-  if(!currentUser){
+  
+  if (!currentUser && typeof window !== 'undefined') {
     router.push('/login');
   }
 
