@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { collection, getDocs, DocumentData } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { useAuth } from '@/context/Authcontext';
+import router from 'next/router';
 
 
 interface QuizRecord {
@@ -16,6 +17,9 @@ const QuizHistory = () => {
   const [quizHistory, setQuizHistory] = useState<QuizRecord[]>([]);
 
   useEffect(() => {
+    if(!currentUser){
+      router.push('/login');
+    }
     const fetchQuizHistory = async () => {
       if (!currentUser) return;
 
