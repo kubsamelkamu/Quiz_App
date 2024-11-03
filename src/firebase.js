@@ -1,6 +1,6 @@
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/firestore';
+import { initializeApp } from 'firebase/app'; 
+import { getAuth } from 'firebase/auth'; 
+import { getFirestore } from 'firebase/firestore'; 
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -11,27 +11,7 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
+const app = initializeApp(firebaseConfig);
 
-export const auth = firebase.auth();
-
-export const signup = (email, password) => {
-  return auth.createUserWithEmailAndPassword(email, password);
-};
-
-export const login = (email, password) => {
-  return auth.signInWithEmailAndPassword(email, password);
-};
-
-const googleProvider = new firebase.auth.GoogleAuthProvider();
-export const signInWithGoogle = () => {
-  return auth.signInWithPopup(googleProvider);
-};
-
-export const logout = () => {
-  return auth.signOut();
-};
-
-export default firebase;
+export const auth = getAuth(app);
+export const db = getFirestore(app);
