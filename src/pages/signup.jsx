@@ -1,4 +1,4 @@
-import dynamic from 'next/dynamic';
+
 
 import SignUp from '../components/auth/SignUp';
 
