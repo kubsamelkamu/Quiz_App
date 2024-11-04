@@ -32,10 +32,13 @@ The **Student Exam Preparation System** provides users with an interactive, educ
    git clone https://github.com/kubsamelkamu/Quiz-app.git
    cd Quiz-app
 2.Install dependency :
+ ```bash
    npm install
 3.Build the Project:
+ ```bash
    npm run build
 4.Start Development Server:
+ ```bash
    npm run dev
 
 ## 🚀 Live Demo
