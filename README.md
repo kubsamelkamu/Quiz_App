@@ -1,40 +1,33 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Quiz app
 
-## Getting Started
+A comprehensive platform designed to assist students in preparing for exams. The platform offers a range of quiz categories, real-time progress tracking, a leaderboard, and a user-friendly dashboard to manage quiz history and achievements.
 
-First, run the development server:
+## Project Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+The **Student Exam Preparation System** provides users with an interactive, educational environment to practice and prepare for exams across various categories and difficulties. Users can track their progress, view quiz history, and compete on a leaderboard.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+1. **User Authentication**: Secure login and signup using Firebase Authentication, with Google Sign-In support.
+2. **Quiz Selection**: Choose from multiple categories and difficulties using data fetched from QuizAPI.
+3. **Progress Tracking**: Track scores and quiz completion in real-time.
+4. **Leaderboard**: View top-performing users and compare scores.
+5. **Quiz History**: Review past quiz scores and performance data.
+6. **Dashboard**: Access personal profile, progress charts, and quiz history.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Installation
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Prerequisites
 
-## Learn More
+- Node.js (version 14 or above)
+- npm or yarn
+- Firebase account with a project configured
 
-To learn more about Next.js, take a look at the following resources:
+### Steps
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Clone the repository:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+   ```bash
+   git clone https://github.com/kubsamelkamu/Quiz-app.git
+   cd Quiz-app
