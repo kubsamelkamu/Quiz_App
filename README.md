@@ -31,3 +31,13 @@ The **Student Exam Preparation System** provides users with an interactive, educ
    ```bash
    git clone https://github.com/kubsamelkamu/Quiz-app.git
    cd Quiz-app
+2.Install dependency :
+   npm install
+3.Build the Project:
+   npm run build
+4.Start Development Server:
+   npm run dev
+
+## 🚀 Live Demo
+
+[Check out the live demo here!](https://quiz-app-ew2g.vercel.app/)
