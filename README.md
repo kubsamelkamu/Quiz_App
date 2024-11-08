@@ -22,7 +22,7 @@ The **Student Exam Preparation System** provides users with an interactive, educ
 
 - Node.js (version 14 or above)
 - npm or yarn
-- Firebase account with a project configured
+
 
 ### Steps
 
