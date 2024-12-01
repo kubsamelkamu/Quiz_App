@@ -1,0 +1,22 @@
+{
+    "name": "Quiz application",
+    "short_name": "Quiz-app",
+    "description": "An interactive Quiz app to prepare for exams.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#4f46e5",
+    "icons": [
+      {
+        "src": "/icons/quiz.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "/icons/quiz.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+  }
+  
